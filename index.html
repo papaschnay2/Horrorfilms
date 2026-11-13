@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Horror Movie Generator</title>
+  <meta name="description" content="Describe a horror movie. Our claims department will check whether it has already happened. An unofficial fan parody built on real films.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Stardos+Stencil:wght@700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <p class="letterhead">Midnight Mutual Life &amp; Casualty · Claims Department</p>
+    <h1>The Horror Movie Generator</h1>
+    <p class="sub">Describe the incident. We will check whether it is a pre-existing condition.</p>
+    <p class="count" id="count"></p>
+    <p class="fineprint">An unofficial fan parody. Midnight Mutual is not a real insurer, which is for the best.</p>
+  </header>
+
+  <main>
+    <section class="form machine" aria-label="Incident generator">
+      <p class="form-no">Form 13-B · Incident details</p>
+      <div class="reels">
+        <div class="reel" data-key="who">
+          <h2>The insured</h2>
+          <div class="window"><span class="value">?</span></div>
+          <p class="tally" aria-live="polite">&nbsp;</p>
+          <button class="lock" type="button" aria-pressed="false">Lock</button>
+        </div>
+        <div class="reel" data-key="where">
+          <h2>Location of incident</h2>
+          <div class="window"><span class="value">?</span></div>
+          <p class="tally" aria-live="polite">&nbsp;</p>
+          <button class="lock" type="button" aria-pressed="false">Lock</button>
+        </div>
+        <div class="reel" data-key="what">
+          <h2>Nature of threat</h2>
+          <div class="window"><span class="value">?</span></div>
+          <p class="tally" aria-live="polite">&nbsp;</p>
+          <button class="lock" type="button" aria-pressed="false">Lock</button>
+        </div>
+        <div class="reel" data-key="oops">
+          <h2>Contributing negligence</h2>
+          <div class="window"><span class="value">?</span></div>
+          <p class="tally">&nbsp;</p>
+          <button class="lock" type="button" aria-pressed="false">Lock</button>
+        </div>
+      </div>
+      <button id="spin" class="stamp-btn" type="button">Spin the Wheel</button>
+    </section>
+
+    <div id="result" hidden>
+      <section class="form report">
+        <p class="form-no" id="report-no">Incident report</p>
+        <h2 id="title" class="title"></h2>
+        <p id="tagline" class="tagline"></p>
+        <p id="synopsis" class="synopsis"></p>
+        <h3 class="field-label">Projected losses</h3>
+        <ol id="exits" class="exits" aria-label="Projected losses"></ol>
+        <button id="pitch" class="stamp-btn red" type="button">File the claim</button>
+        <p id="pitch-status" class="pitch-status" aria-live="polite">&nbsp;</p>
+      </section>
+
+      <section id="verdict" class="form verdict" aria-live="polite" hidden>
+        <p class="form-no">Adjuster's finding</p>
+        <p id="stamp" class="stamp"></p>
+        <h2 id="verdict-head"></h2>
+        <p id="verdict-sub" class="verdict-sub"></p>
+        <ul id="matches" class="movies"></ul>
+        <p id="adjuster-note" class="note"></p>
+        <div class="verdict-actions">
+          <button id="share" class="ghost" type="button">Copy link to this claim</button>
+          <button id="poster-btn" class="ghost" type="button">Make a poster</button>
+        </div>
+        <figure id="poster" class="poster-fig" hidden>
+          <img id="poster-img" alt="">
+          <figcaption>Press and hold the poster (or right-click it) to save or share it.</figcaption>
+        </figure>
+      </section>
+    </div>
+
+    <section class="form daily" aria-labelledby="daily-h">
+      <p class="form-no" id="daily-no">Daily case file</p>
+      <h2 id="daily-h">Name That Movie</h2>
+      <p class="panel-sub">One real film a day. The evidence is unsealed one item at a time. You get four guesses.</p>
+      <ol id="daily-clues" class="clues"></ol>
+      <div id="daily-options" class="daily-options"></div>
+      <p id="daily-msg" class="game-msg" aria-live="polite">&nbsp;</p>
+      <ul id="daily-answer" class="movies"></ul>
+      <p class="score">Daily streak: <b id="daily-streak">0</b> · Best: <b id="daily-best">0</b></p>
+      <button id="daily-share" class="ghost" type="button" hidden>Copy my result</button>
+    </section>
+
+    <section class="form quiz" aria-labelledby="quiz-h">
+      <p class="form-no">Form 7-A · Risk assessment</p>
+      <h2 id="quiz-h">Would You Survive?</h2>
+      <p class="panel-sub">Five questions. Answer as you would actually behave, not as you would shout at the screen.</p>
+      <form id="quiz-form" class="quiz-form"></form>
+      <div id="quiz-result" class="quiz-result" aria-live="polite" hidden>
+        <p id="quiz-stamp" class="stamp"></p>
+        <h3 id="quiz-head"></h3>
+        <dl id="quiz-facts" class="facts"></dl>
+        <button id="quiz-share" class="ghost" type="button">Copy my assessment</button>
+      </div>
+    </section>
+
+    <section class="form game" aria-labelledby="game-h">
+      <p class="form-no">Fraud detection</p>
+      <h2 id="game-h">Real or Fake?</h2>
+      <div class="tabs" role="group" aria-label="What to compare">
+        <button type="button" id="mode-sequels" class="tab" aria-pressed="true">Sequels</button>
+        <button type="button" id="mode-plots" class="tab" aria-pressed="false">Plots</button>
+      </div>
+      <p class="panel-sub" id="game-sub"></p>
+      <div class="game-choices">
+        <button type="button" class="choice" id="choice-a"></button>
+        <span class="or">or</span>
+        <button type="button" class="choice" id="choice-b"></button>
+      </div>
+      <p id="game-msg" class="game-msg" aria-live="polite">&nbsp;</p>
+      <p class="score">Streak: <b id="streak">0</b> · Best: <b id="best">0</b></p>
+      <button id="game-next" class="ghost" type="button" hidden>Next pair</button>
+    </section>
+
+    <section class="form stats" aria-labelledby="stats-h">
+      <p class="form-no">Actuarial tables</p>
+      <h2 id="stats-h">By the Numbers</h2>
+      <p class="panel-sub" id="stats-sub"></p>
+      <ul id="facts" class="facts-list"></ul>
+
+      <div class="exhibit">
+        <p class="form-no">Exhibit A · actual mistakes from actual movies</p>
+        <p id="exhibit-text" class="exhibit-text"></p>
+        <p id="exhibit-src" class="exhibit-src"></p>
+        <button id="exhibit-next" class="ghost small" type="button">Next exhibit</button>
+      </div>
+
+      <div class="stat-grid">
+        <div><h3>The insured</h3><ol id="stat-who" class="bars"></ol></div>
+        <div><h3>Location</h3><ol id="stat-where" class="bars"></ol></div>
+        <div><h3>Nature of threat</h3><ol id="stat-what" class="bars"></ol></div>
+        <div><h3>Repeat offenders</h3><ol id="stat-franchise" class="bars"></ol></div>
+        <div><h3>By decade</h3><ol id="stat-decade" class="bars"></ol></div>
+        <div><h3>Also noted</h3><ol id="stat-tags" class="bars"></ol></div>
+      </div>
+      <p id="stat-combo" class="combo"></p>
+    </section>
+
+    <section class="form browse" aria-labelledby="browse-h">
+      <details>
+        <summary id="browse-h">The full case archive</summary>
+        <input id="filter" type="search" placeholder="Search titles, directors, places, threats…" aria-label="Search the films">
+        <p id="filter-count" class="panel-sub"></p>
+        <ul id="all-movies" class="movies"></ul>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p>Midnight Mutual Life &amp; Casualty does not exist and has never paid a claim. This is an unofficial fan-made parody, not affiliated with any studio or film. Film facts are drawn from public plot summaries and may contain mistakes; the incident reports are entirely our fault.</p>
+  </footer>
+
+  <script src="buckets.js"></script>
+  <script src="movies.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
