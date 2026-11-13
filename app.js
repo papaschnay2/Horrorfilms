@@ -17,7 +17,9 @@
   const fill = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   const newSeed = () => Math.floor(Math.random() * 1e9);
-  const lower = (s) => s[0].toLowerCase() + s.slice(1);
+  // "A cheap hotel" -> "a cheap hotel", but leave "Las Vegas" alone.
+  const lower = (s) => (/^(A|An|The|Her|His|Their|Its|Two|Three|Four|Five|Six|Seven|Eight|Some|Several|One)\b/.test(s)
+    ? s[0].toLowerCase() + s.slice(1) : s);
   const upper = (s) => s[0].toUpperCase() + s.slice(1);
   const el = (tag, cls, text) => {
     const e = document.createElement(tag);
@@ -71,6 +73,7 @@
     let title;
     for (let i = 0; i < 20; i++) {
       title = fill(pick(rand, TITLE_TEMPLATES), vars);
+      title = title.replace(/ (of|to|at|vs\.) The /g, " $1 the ");
       if (!realTitles.has(title.toLowerCase())) break;
     }
     const hows = shuffled(rand, EXITS_ALT);
