@@ -124,6 +124,19 @@
     }[missing];
   }
 
+  // Show the first few matches, with a button that reveals the rest.
+  function showWithMore(list, items, first, render) {
+    items.slice(0, first).forEach((x) => list.append(render(x)));
+    const rest = items.slice(first);
+    if (!rest.length) return;
+    const li = el("li", "more");
+    const btn = el("button", "ghost small", `Show all ${items.length}`);
+    btn.type = "button";
+    btn.addEventListener("click", () => li.replaceWith(...rest.map(render)));
+    li.append(`…and ${rest.length} more. `, btn);
+    list.append(li);
+  }
+
   let lastFinding = null;
   function renderVerdict(state, pitch) {
     const tiers = findMatches(state);
@@ -135,7 +148,8 @@
     if (tiers[3].length) {
       level = 3;
       const all = tiers[3].map((x) => x.m).sort((a, b) => a.y - b.y);
-      shown = shuffled(rand, tiers[3]).slice(0, 3);
+      const ordered = shuffled(rand, tiers[3]);
+      shown = ordered.slice(0, 3);
       const years = [...new Set(all.map((m) => m.y))];
       head.textContent = `They made it in ${years[0]}.` + years.slice(1, 4).map((y) => ` And ${y}.`).join("") +
         (years.length > 4 ? ` And ${years.length - 4} more times.` : "");
@@ -149,16 +163,16 @@
         extra = `The “${first.fr}” file alone holds ${saga.length} entries: ${saga.map((m) => m.y).join(", ")}.`;
       }
       stamp.textContent = "Denied · pre-existing condition";
-      shown.forEach(({ m }) => list.append(movieCard(m)));
-      if (all.length > shown.length) list.append(el("li", "more", `…and ${all.length - shown.length} more on file.`));
+      showWithMore(list, ordered, 3, ({ m }) => movieCard(m));
       if (extra) list.append(el("li", "more saga", extra));
     } else if (tiers[2].length) {
       level = 2;
-      shown = shuffled(rand, tiers[2]).slice(0, 3);
+      const ordered = shuffled(rand, tiers[2]);
+      shown = ordered.slice(0, 3);
       head.textContent = "Not on file. But close.";
       sub.textContent = `“${pitch.title}” has not happened yet. ${plural(tiers[2].length, "prior incident is", "prior incidents are")} one detail away.`;
       stamp.textContent = "Under review";
-      shown.forEach(({ m, hits }) => list.append(movieCard(m, diffNote(m, KEYS.find((k) => !hits.includes(k))))));
+      showWithMore(list, ordered, 3, ({ m, hits }) => movieCard(m, diffNote(m, KEYS.find((k) => !hits.includes(k)))));
     } else {
       level = tiers[1].length ? 1 : 0;
       shown = shuffled(rand, tiers[1]).slice(0, 2);
