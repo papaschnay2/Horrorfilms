@@ -160,6 +160,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .facts dd { margin: 0; }
 .movie-sum { margin: 10px 0 0; font-style: italic; }
 .lookup { display: inline-block; margin-top: 8px; color: var(--carbon); font-weight: 600; font-size: 0.9rem; }
+.lookup.report { margin-left: 16px; color: var(--muted); font-weight: 400; }
+footer a { color: var(--carbon); }
 .more { text-align: center; color: var(--muted); font-style: italic; }
 .more.saga { font-style: normal; font-family: var(--type); color: var(--ink); }
 

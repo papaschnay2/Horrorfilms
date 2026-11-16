@@ -108,7 +108,10 @@
     const a = el("a", "lookup", "Look it up ↗");
     a.href = m.u || `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(`${m.t} ${m.y} film`)}`;
     a.target = "_blank"; a.rel = "noopener";
-    li.append(a);
+    const fix = el("a", "lookup report", "Report a wrong detail");
+    fix.href = "https://github.com/papaschnay2/horrorfilms/issues/new?title=" + encodeURIComponent(`Wrong detail: ${m.t} (${m.y})`);
+    fix.target = "_blank"; fix.rel = "noopener";
+    li.append(a, fix);
     return li;
   }
 
